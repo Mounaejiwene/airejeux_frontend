@@ -24,12 +24,12 @@ import { JeuxRequestDto, JeuxResponseDto } from '../../../shared/models/jeux.dto
           <div class="meta">
             <span class="badge">Quantité: {{ jeu.quantite }}</span>
             <span class="coords" *ngIf="jeu.coordonnees">
-              📍 {{ jeu.coordonnees.lat }}, {{ jeu.coordonnees.lng }}
+              📍 {{ jeu.coordonnees.latitude }}, {{ jeu.coordonnees.longitude }}
             </span>
           </div>
         </div>
         <div class="actions">
-          <button class="btn-edit" (click)="openEditForm(jeu)" [disabled]="loading">✏️ Éditer</button>
+          <button class="btn-edit" (click)="openEditForm(jeu)" [disabled]="loading">Éditer</button>
           <button class="btn-delete" (click)="deleteJeu(jeu)" [disabled]="loading">🗑️ Supprimer</button>
         </div>
       </div>
@@ -65,12 +65,12 @@ import { JeuxRequestDto, JeuxResponseDto } from '../../../shared/models/jeux.dto
 
           <div class="form-row">
             <div class="form-group">
-              <label for="lat">Latitude</label>
-              <input type="number" id="lat" name="lat" [(ngModel)]="currentJeu.coordonnees!.lat" step="0.000001">
+              <label for="latitude">Latitude</label>
+              <input type="text" id="latitude" name="latitude" [(ngModel)]="currentJeu.coordonnees!.latitude">
             </div>
             <div class="form-group">
-              <label for="lng">Longitude</label>
-              <input type="number" id="lng" name="lng" [(ngModel)]="currentJeu.coordonnees!.lng" step="0.000001">
+              <label for="longitude">Longitude</label>
+              <input type="text" id="longitude" name="longitude" [(ngModel)]="currentJeu.coordonnees!.longitude">
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export class AdminJeuxComponent implements OnInit {
     this.isEditMode = true;
     this.currentJeu = {
       ...jeu,
-      coordonnees: jeu.coordonnees ? { ...jeu.coordonnees } : { lat: 0, lng: 0 }
+      coordonnees: jeu.coordonnees ? { ...jeu.coordonnees } : { latitude: '0', longitude: '0' }
     };
     this.showForm = true;
     this.errorMessage = '';
@@ -225,7 +225,7 @@ export class AdminJeuxComponent implements OnInit {
       nom: '',
       quantite: 0,
       description: '',
-      coordonnees: { lat: 0, lng: 0 }
+      coordonnees: { latitude: '0', longitude: '0' }
     };
   }
 }
