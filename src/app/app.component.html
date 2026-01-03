@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" style="position:sticky;top:0;z-index:1000">
+<mat-toolbar color="primary" style="position:sticky;top:0;z-index:1000" *ngIf="!isAdminRoute">
   <button mat-button routerLink="/jeux">Jeux</button>
   <button mat-button routerLink="/reservations/new" *ngIf="isAuth">Nouvelle réservation</button>
   <button mat-button routerLink="/reservations/mine" *ngIf="isAuth">Mes réservations</button>
@@ -11,8 +11,8 @@
     <button mat-button routerLink="/login">Connexion</button>
     <button mat-stroked-button routerLink="/register">Inscription</button>
   </ng-template>
-  
-  
+
+
 </mat-toolbar>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
