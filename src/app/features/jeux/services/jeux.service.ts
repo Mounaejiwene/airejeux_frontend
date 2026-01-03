@@ -17,15 +17,15 @@ export class JeuxService {
   }
 
   createJeu(jeu: JeuxRequestDto): Observable<JeuxResponseDto> {
-    return this.http.post<JeuxResponseDto>(this.api.apiBaseUrl, jeu);
+    return this.http.post<JeuxResponseDto>(`${this.api.apiBaseUrl}/jeux`, jeu);
   }
 
   updateJeu(id: number, jeu: JeuxRequestDto): Observable<JeuxResponseDto> {
-    return this.http.put<JeuxResponseDto>(`${this.api.apiBaseUrl}/${id}`, jeu);
+    return this.http.put<JeuxResponseDto>(`${this.api.apiBaseUrl}/jeux/${id}`, jeu);
   }
 
-  deleteJeu(id: number): Observable<string> {
-    return this.http.delete(`${this.api.apiBaseUrl}/${id}`, { responseType: 'text' });
+  deleteJeu(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api.apiBaseUrl}/jeux/${id}`);
   }
 
 }
