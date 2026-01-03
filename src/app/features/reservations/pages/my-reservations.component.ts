@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReservationsService } from './reservations.service';
-import { ReservationResponseDto } from '../shared/models/reservation.dto';
+import { ReservationsService } from '../services/reservations.service';
+import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
 
 @Component({
   selector: 'app-my-reservations',
@@ -42,13 +42,13 @@ export class MyReservationsComponent implements OnInit {
   }
 
   refresh() {
-    this.service.mine().subscribe(d => this.reservations = d);
+    this.service.getMyReservations().subscribe(d => this.reservations = d);
   }
 
   cancel(r: ReservationResponseDto) {
     if (!r.id) return;
     this.loadingId = r.id;
-    this.service.cancel(r.id).subscribe({
+    this.service.cancelReservation(r.id).subscribe({
       next: () => { this.loadingId = null; this.refresh(); },
       error: () => { this.loadingId = null; }
     });

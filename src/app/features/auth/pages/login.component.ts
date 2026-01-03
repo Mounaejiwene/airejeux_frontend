@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../core/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +10,7 @@ import { AuthService } from '../core/auth.service';
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
   <div class="container">
-    <h2>Connexion</h2>
+    <h2>Page de Connexion</h2>
     <form (ngSubmit)="onSubmit()">
       <label>Username</label>
       <input [(ngModel)]="username" name="username" required />

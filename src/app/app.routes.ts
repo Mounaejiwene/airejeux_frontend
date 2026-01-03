@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/auth.guard';
-import { LoginComponent } from './auth/login.component';
-import { RegisterComponent } from './auth/register.component';
-import { JeuxListComponent } from './jeux/jeux-list.component';
-import { NewReservationComponent } from './reservations/new-reservation.component';
-import { MyReservationsComponent } from './reservations/my-reservations.component';
-import { roleGuard } from './core/role.guard';
-import { AdminDashboardComponent } from './admin/dashboard.component';
-import { AdminReservationsComponent } from './admin/admin-reservations.component';
-import { AdminJeuxComponent } from './admin/admin-jeux.component';
-import { AdminUsersComponent } from './admin/admin-users.component';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { LoginComponent } from './features/auth/pages/login.component';
+import { RegisterComponent } from './features/auth/pages/register.component';
+import { JeuxListComponent } from './features/jeux/pages/jeux-list.component';
+import { NewReservationComponent } from './features/reservations/pages/new-reservation.component';
+import { MyReservationsComponent } from './features/reservations/pages/my-reservations.component';
+import { AdminDashboardComponent } from './features/admin/pages/dashboard.component';
+import { AdminReservationsComponent } from './features/admin/pages/admin-reservations.component';
+import { AdminJeuxComponent } from './features/admin/pages/admin-jeux.component';
+import { AdminUsersComponent } from './features/admin/pages/admin-users.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
