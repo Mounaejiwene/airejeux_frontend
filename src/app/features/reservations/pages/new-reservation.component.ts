@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservationsService } from './reservations.service';
 import { Router } from '@angular/router';
-import { ReservationRequestDto } from '../shared/models/reservation.dto';
+import { ReservationsService } from '../services/reservations.service';
+import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
 
 @Component({
   selector: 'app-new-reservation',
@@ -61,7 +61,7 @@ export class NewReservationComponent {
     this.form.startTime = this.start;          // HH:mm
     this.form.endTime = this.end;              // HH:mm
 
-    this.service.create(this.form).subscribe({
+    this.service.createReservation(this.form).subscribe({
       next: () => this.router.navigate(['/reservations/mine']),
       error: () => {}
     });

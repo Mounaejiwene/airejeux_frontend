@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { JeuxService } from './jeux.service';
-import { JeuxResponseDto } from '../shared/models/jeux.dto';
+import { JeuxService } from '../services/jeux.service';
+import { JeuxResponseDto } from '../../../shared/models/jeux.dto';
 
 @Component({
   selector: 'app-jeux-list',
@@ -28,5 +28,5 @@ import { JeuxResponseDto } from '../shared/models/jeux.dto';
 export class JeuxListComponent implements OnInit {
   jeux: JeuxResponseDto[] = [];
   constructor(private service: JeuxService) {}
-  ngOnInit() { this.service.getAll().subscribe(d => this.jeux = d); }
+  ngOnInit() { this.service.getAllJeux().subscribe(d => this.jeux = d); }
 }

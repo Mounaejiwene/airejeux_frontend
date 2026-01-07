@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReservationsService } from '../reservations/reservations.service';
-import { ReservationResponseDto } from '../shared/models/reservation.dto';
+import { ReservationsService } from '../../reservations/services/reservations.service';
+import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
 
 @Component({
   selector: 'app-admin-reservations',
@@ -38,10 +38,10 @@ export class AdminReservationsComponent implements OnInit {
   loadingId: number | null = null;
   constructor(private service: ReservationsService) {}
   ngOnInit() { this.refresh(); }
-  refresh() { this.service.pending().subscribe(d => this.items = d); }
+  refresh() { this.service.getPendingReservation().subscribe(d => this.items = d); }
   update(id: number, status: string) {
     this.loadingId = id;
-    this.service.updateStatus(id, { status }).subscribe({
+    this.service.updateReservationStatus(id, { status }).subscribe({
       next: () => { this.loadingId = null; this.refresh(); },
       error: () => { this.loadingId = null; }
     });

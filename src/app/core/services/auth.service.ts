@@ -4,7 +4,7 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 import { StorageService } from './storage.service';
-import { UserDto } from '../shared/models/user.dto';
+import { UserDto } from '../../shared/models/user.dto';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
