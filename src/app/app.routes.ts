@@ -12,6 +12,7 @@ import { AdminJeuxComponent } from './admin/admin-jeux.component';
 import { AdminUsersComponent } from './admin/admin-users.component';
 
 export const routes: Routes = [
+  { path: 'api/**', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'jeux', component: JeuxListComponent, canActivate: [authGuard] },

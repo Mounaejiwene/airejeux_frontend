@@ -19,4 +19,9 @@ export class AppComponent {
   get isAuth() { return this.auth.isAuthenticated(); }
   get role() { return this.auth.getRole(); }
   logout() { this.auth.logout(); this.router.navigate(['/login']); }
+
+  // Mobile menu state
+  menuOpen = false;
+  toggleMenu() { this.menuOpen = !this.menuOpen; }
+  closeMenu() { this.menuOpen = false; }
 }

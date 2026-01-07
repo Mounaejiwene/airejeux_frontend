@@ -1,19 +1,37 @@
-<mat-toolbar color="primary" style="position:sticky;top:0;z-index:1000">
-  <button mat-button routerLink="/jeux">Jeux</button>
-  <button mat-button routerLink="/reservations/new" *ngIf="isAuth">Nouvelle réservation</button>
-  <button mat-button routerLink="/reservations/mine" *ngIf="isAuth">Mes réservations</button>
-  <span class="spacer" style="flex:1 1 auto"></span>
-  <ng-container *ngIf="isAuth; else notAuth">
-    <button mat-button routerLink="/admin" *ngIf="role==='ADMIN'">Admin</button>
-    <button mat-button (click)="logout()">Déconnexion</button>
-  </ng-container>
-  <ng-template #notAuth>
-    <button mat-button routerLink="/login">Connexion</button>
-    <button mat-stroked-button routerLink="/register">Inscription</button>
-  </ng-template>
-  
-  
+<mat-toolbar color="primary" class="app-toolbar">
+  <button mat-icon-button class="mobile-only" aria-label="Ouvrir le menu" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="brand" routerLink="/" (click)="closeMenu()">AireJeux</span>
+  <span class="spacer"></span>
+  <nav class="links desktop-only">
+    <button mat-button class="nav-btn" routerLink="/jeux" routerLinkActive="active"><mat-icon>sports_esports</mat-icon><span>Jeux</span></button>
+    <button mat-button class="nav-btn" routerLink="/reservations/new" routerLinkActive="active" *ngIf="isAuth"><mat-icon>event</mat-icon><span>Nouvelle réservation</span></button>
+    <button mat-button class="nav-btn" routerLink="/reservations/mine" routerLinkActive="active" *ngIf="isAuth"><mat-icon>list_alt</mat-icon><span>Mes réservations</span></button>
+    <ng-container *ngIf="isAuth; else notAuth">
+      <button mat-button class="nav-btn" routerLink="/admin" routerLinkActive="active" *ngIf="role==='ADMIN'"><mat-icon>admin_panel_settings</mat-icon><span>Admin</span></button>
+      <button mat-button class="nav-btn" (click)="logout()"><mat-icon>logout</mat-icon><span>Déconnexion</span></button>
+    </ng-container>
+    <ng-template #notAuth>
+      <button mat-button class="nav-btn" routerLink="/login" routerLinkActive="active"><mat-icon>login</mat-icon><span>Connexion</span></button>
+      <button mat-stroked-button class="nav-btn" color="accent" routerLink="/register" routerLinkActive="active"><mat-icon>how_to_reg</mat-icon><span>Inscription</span></button>
+    </ng-template>
+  </nav>
 </mat-toolbar>
+
+<div class="mobile-menu" *ngIf="menuOpen">
+  <button mat-button class="nav-btn" routerLink="/jeux" routerLinkActive="active" (click)="closeMenu()"><mat-icon>sports_esports</mat-icon><span>Jeux</span></button>
+  <button mat-button class="nav-btn" routerLink="/reservations/new" routerLinkActive="active" *ngIf="isAuth" (click)="closeMenu()"><mat-icon>event</mat-icon><span>Nouvelle réservation</span></button>
+  <button mat-button class="nav-btn" routerLink="/reservations/mine" routerLinkActive="active" *ngIf="isAuth" (click)="closeMenu()"><mat-icon>list_alt</mat-icon><span>Mes réservations</span></button>
+  <ng-container *ngIf="isAuth; else notAuthMobile">
+    <button mat-button class="nav-btn" routerLink="/admin" routerLinkActive="active" *ngIf="role==='ADMIN'" (click)="closeMenu()"><mat-icon>admin_panel_settings</mat-icon><span>Admin</span></button>
+    <button mat-button class="nav-btn" (click)="logout(); closeMenu()"><mat-icon>logout</mat-icon><span>Déconnexion</span></button>
+  </ng-container>
+  <ng-template #notAuthMobile>
+    <button mat-button class="nav-btn" routerLink="/login" routerLinkActive="active" (click)="closeMenu()"><mat-icon>login</mat-icon><span>Connexion</span></button>
+    <button mat-stroked-button class="nav-btn" color="accent" routerLink="/register" routerLinkActive="active" (click)="closeMenu()"><mat-icon>how_to_reg</mat-icon><span>Inscription</span></button>
+  </ng-template>
+</div>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
