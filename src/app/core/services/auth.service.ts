@@ -21,7 +21,8 @@ export class AuthService {
   }
 
   register(dto: UserDto): Observable<string> {
-    return this.http.post(this.api.apiBaseUrl + '/auth/register', dto, { responseType: 'text' });
+    const payload: UserDto = { ...dto, role: 'USER' };
+    return this.http.post(this.api.apiBaseUrl + '/auth/register', payload, { responseType: 'text' });
   }
 
   logout() { this.storage.clear(); }

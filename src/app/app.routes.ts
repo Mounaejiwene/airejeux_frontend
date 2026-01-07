@@ -13,6 +13,7 @@ import { AdminJeuxComponent } from './features/admin/pages/admin-jeux.component'
 import { AdminUsersComponent } from './features/admin/pages/admin-users.component';
 
 export const routes: Routes = [
+  { path: 'api/**', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'jeux', component: JeuxListComponent, canActivate: [authGuard] },
