@@ -5,6 +5,7 @@
   <span class="brand" routerLink="/" (click)="closeMenu()">AireJeux</span>
   <span class="spacer"></span>
   <nav class="links desktop-only">
+    <button mat-button class="nav-btn" routerLink="/map" routerLinkActive="active"><mat-icon>map</mat-icon><span>Carte</span></button>
     <button mat-button class="nav-btn" routerLink="/jeux" routerLinkActive="active"><mat-icon>sports_esports</mat-icon><span>Jeux</span></button>
     <button mat-button class="nav-btn" routerLink="/reservations/new" routerLinkActive="active" *ngIf="isAuth"><mat-icon>event</mat-icon><span>Nouvelle réservation</span></button>
     <button mat-button class="nav-btn" routerLink="/reservations/mine" routerLinkActive="active" *ngIf="isAuth"><mat-icon>list_alt</mat-icon><span>Mes réservations</span></button>
@@ -20,6 +21,7 @@
 </mat-toolbar>
 
 <div class="mobile-menu" *ngIf="menuOpen && !isAdminRoute">
+  <button mat-button class="nav-btn" routerLink="/map" routerLinkActive="active" (click)="closeMenu()"><mat-icon>map</mat-icon><span>Carte</span></button>
   <button mat-button class="nav-btn" routerLink="/jeux" routerLinkActive="active" (click)="closeMenu()"><mat-icon>sports_esports</mat-icon><span>Jeux</span></button>
   <button mat-button class="nav-btn" routerLink="/reservations/new" routerLinkActive="active" *ngIf="isAuth" (click)="closeMenu()"><mat-icon>event</mat-icon><span>Nouvelle réservation</span></button>
   <button mat-button class="nav-btn" routerLink="/reservations/mine" routerLinkActive="active" *ngIf="isAuth" (click)="closeMenu()"><mat-icon>list_alt</mat-icon><span>Mes réservations</span></button>
@@ -31,7 +33,7 @@
     <button mat-button class="nav-btn" routerLink="/login" routerLinkActive="active" (click)="closeMenu()"><mat-icon>login</mat-icon><span>Connexion</span></button>
     <button mat-stroked-button class="nav-btn" color="accent" routerLink="/register" routerLinkActive="active" (click)="closeMenu()"><mat-icon>how_to_reg</mat-icon><span>Inscription</span></button>
   </ng-template>
-  
+
 </div>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
