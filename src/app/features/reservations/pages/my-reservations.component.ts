@@ -14,10 +14,10 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
         <div *ngFor="let r of reservations" class="p-4 border rounded-lg shadow-sm bg-white">
           <div class="flex justify-between items-start">
             <div>
-              <p class="font-bold text-blue-600">Réservation #{{r.id}}</p>
+              <p class="font-bold text-blue-600">Réservation #{{r.id}} - {{r.jeuxNom || 'Jeu #' + r.jeuxId}}</p>
               <div class="text-sm text-gray-600 mt-1">
-                <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} | 
-                <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}}
+                <strong>Date:</strong> {{r.bookingDate}} | 
+                <strong>Heure:</strong> {{r.startTime}} - {{r.endTime}}
               </div>
               <p class="text-sm mt-2"><strong>Quantité:</strong> {{r.quantity}}</p>
             </div>

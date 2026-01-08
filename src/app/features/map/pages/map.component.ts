@@ -1,18 +1,18 @@
 import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { JeuxService } from '../services/jeux.service';
+import { JeuxService } from '../../jeux/services/jeux.service';
 import { JeuxResponseDto } from '../../../shared/models/jeux.dto';
 
 @Component({
-  selector: 'app-jeux-list',
+  selector: 'app-map',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="jeux-container">
-      <div class="header">
-        <h1>🎮 Aires de Jeux à Tours</h1>
-        <p>Découvrez tous les équipements de jeux disponibles</p>
+    <div class="map-container">
+      <div class="map-header">
+        <h1>Carte des Aires de Jeux</h1>
+        <p>Découvrez les {{ totalJeux }} équipements de jeux répartis dans la ville</p>
       </div>
 
       <div class="content">
@@ -47,7 +47,7 @@ import { JeuxResponseDto } from '../../../shared/models/jeux.dto';
                   <span class="coords">
                     📍 {{ jeu.coordonnees.latitude | number:'1.4-4' }}, {{ jeu.coordonnees.longitude | number:'1.4-4' }}
                   </span>
-                  <a [routerLink]="['/reservations/new']" [queryParams]="{id: jeu.id, nom: jeu.nom}" class="btn-reserve">
+                  <a [routerLink]="['/reservations/new']" [queryParams]="{jeuxId: jeu.id}" class="btn-reserve">
                     Réserver
                   </a>
                 </div>
@@ -63,24 +63,24 @@ import { JeuxResponseDto } from '../../../shared/models/jeux.dto';
     </div>
   `,
   styles: [`
-    .jeux-container {
+    .map-container {
       min-height: calc(100vh - 80px);
       background: #f5f7fa;
     }
 
-    .header {
+    .map-header {
       text-align: center;
       padding: 2rem;
       background: #667eea;
       color: white;
     }
 
-    .header h1 {
+    .map-header h1 {
       margin: 0;
       font-size: 2rem;
     }
 
-    .header p {
+    .map-header p {
       margin: 0.5rem 0 0;
       opacity: 0.9;
     }
@@ -232,10 +232,11 @@ import { JeuxResponseDto } from '../../../shared/models/jeux.dto';
     }
   `]
 })
-export class JeuxListComponent implements OnInit {
+export class MapComponent implements OnInit {
   jeux: JeuxResponseDto[] = [];
   filteredJeux: JeuxResponseDto[] = [];
   isLoading = true;
+  totalJeux = 0;
   private map: any;
   private markers: any[] = [];
   private isBrowser: boolean;
@@ -254,17 +255,17 @@ export class JeuxListComponent implements OnInit {
   private async initMap(): Promise<void> {
     if (!this.isBrowser) return;
 
-    // Dynamically import Leaflet only in browser
+    // Import dynamique de Leaflet
     const L = await import('leaflet');
 
-    // Tours center coordinates
+    // Centre de Tours, France
     this.map = L.map('map').setView([47.394, 0.6848], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    // Custom icon
+    // Icône personnalisée
     const customIcon = L.icon({
       iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
       iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -274,7 +275,7 @@ export class JeuxListComponent implements OnInit {
       popupAnchor: [1, -34]
     });
 
-    // Add markers for each jeu
+    // Ajouter les markers
     this.jeux.forEach(jeu => {
       if (jeu.coordonnees) {
         const lat = parseFloat(jeu.coordonnees.latitude);
@@ -294,11 +295,12 @@ export class JeuxListComponent implements OnInit {
     });
   }
 
-  loadJeux(): void {
+  private loadJeux(): void {
     this.jeuxService.getAllJeux().subscribe({
       next: (data) => {
         this.jeux = data;
         this.filteredJeux = data;
+        this.totalJeux = data.length;
         this.isLoading = false;
         setTimeout(() => this.initMap(), 100);
       },

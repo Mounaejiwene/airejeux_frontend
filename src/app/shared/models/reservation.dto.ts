@@ -9,13 +9,16 @@ export interface ReservationRequestDto {
 
 export interface ReservationResponseDto {
   id: number;
+  utilisateurId?: number;
+  utilisateurUsername?: string;
   jeuxId: number;
-  dateDebut: string; // ISO string
-  dateFin: string;   // ISO string
+  jeuxNom?: string;     // Nom du jeu réservé
+  bookingDate: string; // "YYYY-MM-DD"
+  startTime: string;   // "HH:mm:ss"
+  endTime: string;     // "HH:mm:ss"
   quantity: number;
   status: string;
   notes: string | null;
-  utilisateurUsername?: string;
 }
 
 export interface ReservationUpdateStatusDto {

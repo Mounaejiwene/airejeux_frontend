@@ -10,10 +10,13 @@ import { AdminLayoutComponent } from './features/admin/layouts/admin-layout.comp
 import { AdminDashboardComponent } from './features/admin/pages/dashboard.component';
 import { AdminReservationsComponent } from './features/admin/pages/admin-reservations.component';
 import { AdminJeuxComponent } from './features/admin/pages/admin-jeux.component';
+import { MapComponent } from './features/map/pages/map.component';
+
 export const routes: Routes = [
   { path: 'api/**', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'map', component: MapComponent },
   { path: 'jeux', component: JeuxListComponent, canActivate: [authGuard] },
   { path: 'reservations/new', component: NewReservationComponent, canActivate: [authGuard] },
   { path: 'reservations/mine', component: MyReservationsComponent, canActivate: [authGuard] },
