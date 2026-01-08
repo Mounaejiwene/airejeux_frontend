@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReservationsService } from '../services/reservations.service';
-import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
+import { JeuxService } from '../../jeux/services/jeux.service'; 
 
 @Component({
   selector: 'app-new-reservation',
@@ -34,9 +34,15 @@ import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-gray-600 mb-2">Quantité</label>
-        <input type="number" [(ngModel)]="form.quantity" name="quantity" min="1" required 
+        <label class="block text-sm font-semibold text-gray-600 mb-2">
+            Quantité (Max disponible : {{ maxAvailable }})
+        </label>
+        <input type="number" [(ngModel)]="form.quantity" name="quantity" 
+               min="1" [max]="maxAvailable" required 
                class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none">
+        <p *ngIf="form.quantity > maxAvailable" class="text-red-500 text-xs mt-1">
+            La quantité dépasse le stock disponible.
+        </p>
       </div>
 
       <div>
@@ -46,7 +52,7 @@ import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
                   class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none"></textarea>
       </div>
 
-      <button type="submit" [disabled]="resForm.invalid || loading" 
+      <button type="submit" [disabled]="resForm.invalid || loading || form.quantity > maxAvailable" 
               class="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all disabled:opacity-50">
         {{ loading ? 'Enregistrement...' : 'Confirmer la réservation' }}
       </button>
@@ -59,7 +65,6 @@ import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
   `
 })
 export class NewReservationComponent implements OnInit {
-  // On initialise le formulaire avec les champs attendus par le DTO Java
   form: any = {
     jeuxId: 0,
     bookingDate: '',
@@ -73,9 +78,11 @@ export class NewReservationComponent implements OnInit {
   start = '';
   end = '';
   loading = false;
+  maxAvailable = 1;
 
   constructor(
-    private service: ReservationsService, 
+    private service: ReservationsService,
+    private jeuxService: JeuxService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -85,36 +92,30 @@ export class NewReservationComponent implements OnInit {
       this.form.jeuxId = +params['id'] || 0;
       if (!this.form.jeuxId) {
         this.router.navigate(['/jeux']);
+      } else {
+        // CORRECTION : getJeuxById (avec un 'x') et typage du paramètre 'jeu'
+        this.jeuxService.getJeuxById(this.form.jeuxId).subscribe((jeu: any) => {
+            this.maxAvailable = jeu.quantite;
+        });
       }
     });
   }
 
   onSubmit() {
     this.loading = true;
-
-    // Mapping des données vers les noms de champs du Backend
-    this.form.bookingDate = this.date; // "YYYY-MM-DD"
-    this.form.startTime = this.start;   // "HH:mm"
-    this.form.endTime = this.end;       // "HH:mm"
-
-    
+    this.form.bookingDate = this.date;
+    this.form.startTime = this.start;
+    this.form.endTime = this.end;
 
     this.service.createReservation(this.form).subscribe({
-      next: () => {
-        // Redirection vers la page des réservations de l'utilisateur
-        this.router.navigate(['/mes-reservations']);
-      },
+      next: () => this.router.navigate(['/reservations/mine']),
       error: (err) => {
         this.loading = false;
-        // Affiche l'erreur précise retournée par le backend
         const errorMsg = err.error?.message || 'Erreur lors de l\'enregistrement';
         alert(errorMsg);
-        console.error('Erreur réservation:', err);
       }
     });
   }
 
-  onCancel() { 
-    this.router.navigate(['/jeux']); 
-  }
+  onCancel() { this.router.navigate(['/jeux']); }
 }
