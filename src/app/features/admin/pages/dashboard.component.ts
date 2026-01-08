@@ -30,13 +30,6 @@ import { AuthService } from '../../../core/services/auth.service';
         <p>Approuver ou rejeter les réservations en attente</p>
         <span class="arrow">→</span>
       </a>
-
-      <a routerLink="/admin/users" class="card users">
-        <div class="icon">👥</div>
-        <h3>Gestion des utilisateurs</h3>
-        <p>Gérer les utilisateurs et leurs rôles</p>
-        <span class="arrow">→</span>
-      </a>
     </div>
   </div>
   `,
@@ -49,7 +42,6 @@ import { AuthService } from '../../../core/services/auth.service';
     `.card { display: flex; flex-direction: column; padding: 32px; background: white; border: 2px solid #e0e0e0; border-radius: 16px; text-decoration: none; cursor: pointer; }`,
     `.card.jeux { border-top: 4px solid #667eea; }`,
     `.card.reservations { border-top: 4px solid #f5576c; }`,
-    `.card.users { border-top: 4px solid #4facfe; }`,
     `.icon { font-size: 3rem; margin-bottom: 16px; }`,
     `.card h3 { margin: 0 0 12px; color: #2c3e50; font-size: 1.4rem; }`,
     `.card p { margin: 0; color: #7f8c8d; line-height: 1.6; flex: 1; }`,
