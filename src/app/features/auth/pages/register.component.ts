@@ -26,7 +26,7 @@ import { UserDto } from '../../../shared/models/user.dto';
   styles: [`.container{max-width:420px;margin:40px auto;display:flex;flex-direction:column;gap:12px}`]
 })
 export class RegisterComponent {
-  form: UserDto = { username: '', password: '', nom: '', prenom: '', mail: '', role: 'USER' };
+  form: UserDto = { username: '', password: '', nom: '', prenom: '', mail: '', role: 'ROLE_USER' };
   loading = false;
   constructor(private auth: AuthService, private router: Router) {}
   onSubmit() {
