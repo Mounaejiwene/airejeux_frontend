@@ -10,7 +10,7 @@ import { AdminLayoutComponent } from './features/admin/layouts/admin-layout.comp
 import { AdminDashboardComponent } from './features/admin/pages/dashboard.component';
 import { AdminReservationsComponent } from './features/admin/pages/admin-reservations.component';
 import { AdminJeuxComponent } from './features/admin/pages/admin-jeux.component';
-import { AdminUsersComponent } from './features/admin/pages/admin-users.component';
+import { AdminRegisterComponent } from './features/admin/pages/admin-register.component';
 
 export const routes: Routes = [
   { path: 'api/**', redirectTo: 'login' },
@@ -28,9 +28,9 @@ export const routes: Routes = [
       { path: '', component: AdminDashboardComponent },
       { path: 'jeux', component: AdminJeuxComponent },
       { path: 'reservations', component: AdminReservationsComponent },
-      { path: 'users', component: AdminUsersComponent }
+      { path: 'register', component: AdminRegisterComponent }
     ]
   },
-  { path: '', pathMatch: 'full', redirectTo: 'jeux' },
-  { path: '**', redirectTo: 'jeux' }
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: '**', redirectTo: 'login' }
 ];

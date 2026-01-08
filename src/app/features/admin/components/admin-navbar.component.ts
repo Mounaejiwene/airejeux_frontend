@@ -40,9 +40,9 @@ import { AuthService } from '../../../core/services/auth.service';
               <span>Réservations</span>
             </a>
 
-            <a routerLink="/admin/users" routerLinkActive="active-link" class="nav-item">
-              <mat-icon>group</mat-icon>
-              <span>Utilisateurs</span>
+            <a routerLink="/admin/register" routerLinkActive="active-link" class="nav-item">
+              <mat-icon>person_add</mat-icon>
+              <span>Créer un compte</span>
             </a>
           </div>
 
