@@ -201,7 +201,7 @@ export class AdminJeuxComponent implements OnInit {
   }
 
   deleteJeu(jeu: JeuxResponseDto) {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${jeu.nom}" ?\n\nAttention: La suppression échouera si des réservations existent pour ce jeu.`)) {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${jeu.nom}" ?`)) {
       return;
     }
 
@@ -209,13 +209,14 @@ export class AdminJeuxComponent implements OnInit {
     this.jeuxService.deleteJeu(jeu.id).subscribe({
       next: () => {
         this.loading = false;
-        this.loadJeux();
+        // MISE À JOUR AUTOMATIQUE : on retire le jeu de la liste locale
+        this.jeux = this.jeux.filter(j => j.id !== jeu.id); 
+        console.log('Jeu supprimé de l’affichage local');
       },
       error: (err) => {
         this.loading = false;
-        const msg = err.error?.message || 'Impossible de supprimer ce jeu (des réservations existent peut-être)';
+        const msg = err.error?.message || 'Erreur lors de la suppression';
         alert(`Erreur: ${msg}`);
-        console.error('Erreur lors de la suppression:', err);
       }
     });
   }
