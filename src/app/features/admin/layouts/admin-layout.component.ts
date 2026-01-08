@@ -7,10 +7,9 @@ import { AdminNavbarComponent } from '../components/admin-navbar.component';
   standalone: true,
   imports: [RouterOutlet, AdminNavbarComponent],
   template: `
-    <app-admin-navbar></app-admin-navbar>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
+  <div class="admin-container">
+    <router-outlet></router-outlet>
+  </div>
   `,
   styles: [`
     :host {

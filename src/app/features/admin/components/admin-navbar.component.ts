@@ -1,48 +1,83 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule],
   template: `
-  <mat-toolbar color="primary" class="admin-toolbar">
-    <span class="brand" routerLink="/admin">Admin - AireJeux</span>
-    <span class="spacer"></span>
-    <nav class="links">
-      <button mat-button class="nav-btn" routerLink="/admin" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:true}"><mat-icon>dashboard</mat-icon><span>Dashboard</span></button>
-      <button mat-button class="nav-btn" routerLink="/admin/jeux" routerLinkActive="active"><mat-icon>sports_esports</mat-icon><span>Jeux</span></button>
-      <button mat-button class="nav-btn" routerLink="/admin/reservations" routerLinkActive="active"><mat-icon>event</mat-icon><span>Réservations</span></button>
-      <button mat-button class="nav-btn" routerLink="/admin/users" routerLinkActive="active"><mat-icon>group</mat-icon><span>Utilisateurs</span></button>
-      <button mat-stroked-button class="nav-btn" color="accent" routerLink="/jeux"><mat-icon>visibility</mat-icon><span>Vue utilisateur</span></button>
-      <button mat-button class="nav-btn" (click)="logout()"><mat-icon>logout</mat-icon><span>Déconnexion</span></button>
+    <nav class="bg-white shadow-md border-b border-gray-100 sticky top-0 z-[1000]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+          
+          <div class="flex items-center gap-3 cursor-pointer" routerLink="/admin">
+            <div class="bg-indigo-600 p-2 rounded-lg shadow-indigo-200 shadow-lg">
+              <mat-icon class="text-white">admin_panel_settings</mat-icon>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-gray-900 text-lg font-bold leading-none">Admin</span>
+              <span class="text-indigo-600 text-xs font-black uppercase tracking-widest">AireJeux</span>
+            </div>
+          </div>
+
+          <div class="hidden lg:flex items-center space-x-1">
+            <a routerLink="/admin" [routerLinkActive]="'active-link'" [routerLinkActiveOptions]="{exact:true}"
+               class="nav-item">
+              <mat-icon>dashboard</mat-icon>
+              <span>Dashboard</span>
+            </a>
+
+            <a routerLink="/admin/jeux" routerLinkActive="active-link" class="nav-item">
+              <mat-icon>sports_esports</mat-icon>
+              <span>Jeux</span>
+            </a>
+
+            <a routerLink="/admin/reservations" routerLinkActive="active-link" class="nav-item">
+              <mat-icon>event</mat-icon>
+              <span>Réservations</span>
+            </a>
+
+            <a routerLink="/admin/users" routerLinkActive="active-link" class="nav-item">
+              <mat-icon>group</mat-icon>
+              <span>Utilisateurs</span>
+            </a>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <button routerLink="/jeux" 
+                    class="hidden md:flex items-center gap-2 px-4 py-2 border border-indigo-100 text-indigo-600 hover:bg-indigo-50 rounded-xl text-sm font-bold transition-all">
+              <mat-icon class="scale-90">visibility</mat-icon>
+              Vue utilisateur
+            </button>
+
+            <div class="h-8 w-px bg-gray-100 mx-1"></div>
+
+            <button (click)="logout()" 
+                    class="flex items-center gap-2 text-gray-400 hover:text-red-500 p-2 rounded-lg transition-colors">
+              <mat-icon>logout</mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </nav>
-  </mat-toolbar>
   `,
   styles: [`
-    .admin-toolbar { position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-    .brand { font-weight: 700; letter-spacing: .4px; cursor: pointer; }
-    .spacer { flex: 1 1 auto; }
-    .links { display: flex; align-items: center; gap: 4px; }
-    .nav-btn { display: inline-flex; align-items: center; gap: 6px; border-radius: 20px; padding: 0 10px; }
-    .nav-btn.active { background-color: rgba(255,255,255,0.18); }
-    .welcome { margin: 0 8px; opacity: .9; }
+    .nav-item {
+      @apply flex items-center gap-2 text-gray-500 hover:text-indigo-600 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:bg-indigo-50/50;
+    }
+    .active-link {
+      @apply text-indigo-600 bg-indigo-50 shadow-sm font-bold;
+    }
+    mat-icon { font-size: 20px; width: 20px; height: 20px; }
   `]
 })
 export class AdminNavbarComponent {
-  constructor(
-    private auth: AuthService,
-    private router: Router
-  ) {}
-
-  get username(): string {
-    return this.auth.getUsername() || 'Admin';
-  }
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   logout(): void {
     this.auth.logout();

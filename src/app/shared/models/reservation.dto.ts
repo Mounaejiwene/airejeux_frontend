@@ -1,15 +1,23 @@
 export interface ReservationRequestDto {
   jeuxId: number;
-  bookingDate: string; // ISO LocalDate
-  startTime: string;   // ISO LocalTime
-  endTime: string;     // ISO LocalTime
+  bookingDate: string; // Doit être "YYYY-MM-DD"
+  startTime: string;   // Doit être "HH:mm"
+  endTime: string;     // Doit être "HH:mm"
   quantity: number;
-  notes?: string;
+  notes?: string | null;
 }
-export interface ReservationResponseDto extends ReservationRequestDto {
+
+export interface ReservationResponseDto {
   id: number;
-  utilisateurId?: number;
+  jeuxId: number;
+  dateDebut: string; // ISO string
+  dateFin: string;   // ISO string
+  quantity: number;
+  status: string;
+  notes: string | null;
   utilisateurUsername?: string;
-  status?: string;
 }
-export interface ReservationUpdateStatusDto { status: string; }
+
+export interface ReservationUpdateStatusDto {
+  status: string;
+}

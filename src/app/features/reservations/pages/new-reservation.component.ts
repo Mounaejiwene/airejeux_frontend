@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ReservationsService } from '../services/reservations.service';
 import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
 
@@ -10,38 +10,57 @@ import { ReservationRequestDto } from '../../../shared/models/reservation.dto';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-  <div class="wrap">
-    <h2>Nouvelle réservation</h2>
-    <form (ngSubmit)="onSubmit()" class="form">
-      <label>Jeu ID</label>
-      <input type="number" [(ngModel)]="form.jeuxId" name="jeuxId" required />
+  <div class="max-w-md mx-auto mt-12 p-8 bg-white rounded-2xl shadow-xl">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Finaliser votre créneau</h2>
+    
+    <form (ngSubmit)="onSubmit()" #resForm="ngForm" class="space-y-6">
+      <div>
+        <label class="block text-sm font-semibold text-gray-600 mb-2">Date de l'activité</label>
+        <input type="date" [(ngModel)]="date" name="date" required 
+               class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none transition-all">
+      </div>
 
-      <label>Date</label>
-      <input type="date" [(ngModel)]="date" name="date" required />
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-2">Heure de début</label>
+          <input type="time" [(ngModel)]="start" name="start" required 
+                 class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-2">Heure de fin</label>
+          <input type="time" [(ngModel)]="end" name="end" required 
+                 class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none">
+        </div>
+      </div>
 
-      <label>Début</label>
-      <input type="time" [(ngModel)]="start" name="start" required />
+      <div>
+        <label class="block text-sm font-semibold text-gray-600 mb-2">Quantité</label>
+        <input type="number" [(ngModel)]="form.quantity" name="quantity" min="1" required 
+               class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none">
+      </div>
 
-      <label>Fin</label>
-      <input type="time" [(ngModel)]="end" name="end" required />
+      <div>
+        <label class="block text-sm font-semibold text-gray-600 mb-2">Notes</label>
+        <textarea [(ngModel)]="form.notes" name="notes" rows="3" 
+                  placeholder="Informations complémentaires..."
+                  class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none"></textarea>
+      </div>
 
-      <label>Quantité</label>
-      <input type="number" [(ngModel)]="form.quantity" name="quantity" min="1" required />
-
-      <label>Notes</label>
-      <textarea [(ngModel)]="form.notes" name="notes"></textarea>
-
-      <button type="submit">Réserver</button>
+      <button type="submit" [disabled]="resForm.invalid || loading" 
+              class="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all disabled:opacity-50">
+        {{ loading ? 'Enregistrement...' : 'Confirmer la réservation' }}
+      </button>
+      
+      <button type="button" (click)="onCancel()" class="w-full text-gray-400 text-sm hover:text-gray-600">
+        Annuler et revenir aux jeux
+      </button>
     </form>
   </div>
-  `,
-  styles: [
-    `.wrap{max-width:640px;margin:20px auto;padding:0 16px}`,
-    `.form{display:grid;grid-template-columns:1fr;gap:12px}`
-  ]
+  `
 })
-export class NewReservationComponent {
-  form: ReservationRequestDto = {
+export class NewReservationComponent implements OnInit {
+  // On initialise le formulaire avec les champs attendus par le DTO Java
+  form: any = {
     jeuxId: 0,
     bookingDate: '',
     startTime: '',
@@ -49,21 +68,53 @@ export class NewReservationComponent {
     quantity: 1,
     notes: ''
   };
+
   date = '';
   start = '';
   end = '';
+  loading = false;
 
-  constructor(private service: ReservationsService, private router: Router) {}
+  constructor(
+    private service: ReservationsService, 
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.form.jeuxId = +params['id'] || 0;
+      if (!this.form.jeuxId) {
+        this.router.navigate(['/jeux']);
+      }
+    });
+  }
 
   onSubmit() {
-    // Convertir inputs HTML (date/time) en ISO local strings attendus par backend
-    this.form.bookingDate = this.date;         // yyyy-MM-dd
-    this.form.startTime = this.start;          // HH:mm
-    this.form.endTime = this.end;              // HH:mm
+    this.loading = true;
+
+    // Mapping des données vers les noms de champs du Backend
+    this.form.bookingDate = this.date; // "YYYY-MM-DD"
+    this.form.startTime = this.start;   // "HH:mm"
+    this.form.endTime = this.end;       // "HH:mm"
+
+    
 
     this.service.createReservation(this.form).subscribe({
-      next: () => this.router.navigate(['/reservations/mine']),
-      error: () => {}
+      next: () => {
+        // Redirection vers la page des réservations de l'utilisateur
+        this.router.navigate(['/mes-reservations']);
+      },
+      error: (err) => {
+        this.loading = false;
+        // Affiche l'erreur précise retournée par le backend
+        const errorMsg = err.error?.message || 'Erreur lors de l\'enregistrement';
+        alert(errorMsg);
+        console.error('Erreur réservation:', err);
+      }
     });
+  }
+
+  onCancel() { 
+    this.router.navigate(['/jeux']); 
   }
 }

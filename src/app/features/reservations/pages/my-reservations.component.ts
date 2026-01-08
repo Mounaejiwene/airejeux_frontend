@@ -8,49 +8,36 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
   standalone: true,
   imports: [CommonModule],
   template: `
-  <div class="wrap">
-    <h2>Mes réservations</h2>
-    <div class="list" *ngIf="reservations.length; else empty">
-      <div class="item" *ngFor="let r of reservations">
-        <div>
-          <div><strong>Jeu:</strong> {{r.jeuxId}} | <strong>Date:</strong> {{r.bookingDate}} | <strong>Heure:</strong> {{r.startTime}} - {{r.endTime}}</div>
-          <div><strong>Quantité:</strong> {{r.quantity}} | <strong>Statut:</strong> {{r.status}}</div>
-          <div *ngIf="r.notes"><em>{{r.notes}}</em></div>
+    <div class="p-6 max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6">Mes Réservations</h2>
+      <div *ngIf="reservations.length > 0; else empty" class="space-y-4">
+        <div *ngFor="let r of reservations" class="p-4 border rounded-lg shadow-sm bg-white">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="font-bold text-blue-600">Réservation #{{r.id}}</p>
+              <div class="text-sm text-gray-600 mt-1">
+                <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} | 
+                <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}}
+              </div>
+              <p class="text-sm mt-2"><strong>Quantité:</strong> {{r.quantity}}</p>
+            </div>
+            <span [class]="'px-2 py-1 rounded text-xs font-bold ' + getStatusClass(r.status)">
+              {{r.status}}
+            </span>
+          </div>
         </div>
-        <button (click)="cancel(r)" [disabled]="loadingId===r.id">Annuler</button>
       </div>
+      <ng-template #empty><p class="text-gray-500">Aucune réservation trouvée.</p></ng-template>
     </div>
-    <ng-template #empty>
-      <p>Aucune réservation.</p>
-    </ng-template>
-  </div>
-  `,
-  styles: [
-    `.wrap{max-width:900px;margin:20px auto;padding:0 16px}`,
-    `.list{display:flex;flex-direction:column;gap:12px}`,
-    `.item{display:flex;justify-content:space-between;align-items:center;border:1px solid #eee;border-radius:10px;padding:10px;background:#fff}`
-  ]
+  `
 })
 export class MyReservationsComponent implements OnInit {
   reservations: ReservationResponseDto[] = [];
-  loadingId: number | null = null;
-
   constructor(private service: ReservationsService) {}
-
-  ngOnInit() {
-    this.refresh();
-  }
-
-  refresh() {
-    this.service.getMyReservations().subscribe(d => this.reservations = d);
-  }
-
-  cancel(r: ReservationResponseDto) {
-    if (!r.id) return;
-    this.loadingId = r.id;
-    this.service.cancelReservation(r.id).subscribe({
-      next: () => { this.loadingId = null; this.refresh(); },
-      error: () => { this.loadingId = null; }
-    });
+  ngOnInit() { this.service.getMyReservations().subscribe(data => this.reservations = data); }
+  getStatusClass(s: string) {
+    if (s === 'APPROVED') return 'bg-green-100 text-green-700';
+    if (s === 'REJECTED') return 'bg-red-100 text-red-700';
+    return 'bg-yellow-100 text-yellow-700';
   }
 }
