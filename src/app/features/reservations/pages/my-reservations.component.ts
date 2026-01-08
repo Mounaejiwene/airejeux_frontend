@@ -16,8 +16,8 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
             <div>
               <p class="font-bold text-blue-600">Réservation #{{r.id}}</p>
               <div class="text-sm text-gray-600 mt-1">
-                <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} | 
-                <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}}
+                <strong>Date:</strong> {{r.bookingDate}} | 
+                <strong>Heure:</strong> {{r.startTime}} - {{r.endTime}}
               </div>
               <p class="text-sm mt-2"><strong>Quantité:</strong> {{r.quantity}}</p>
             </div>

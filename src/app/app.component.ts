@@ -4,21 +4,22 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from './core/services/auth.service';
 import { filter } from 'rxjs';
-// Chemin exact basé sur votre capture d'écran
 import { AdminNavbarComponent } from './features/admin/components/admin-navbar.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet, MatIconModule, AdminNavbarComponent],
+  imports: [CommonModule, RouterModule, RouterOutlet, MatIconModule, AdminNavbarComponent, ToastComponent],
   template: `
+    <app-toast></app-toast>
     <app-admin-navbar *ngIf="isAdminRoute && !isAuthPage"></app-admin-navbar>
 
-    <nav *ngIf="!isAdminRoute && !isAuthPage && isAuth" 
+    <nav *ngIf="!isAdminRoute && !isAuthPage && isAuth"
          class="bg-white shadow-md border-b border-gray-100 sticky top-0 z-[1000]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20 items-center">
-          
+
           <div class="flex items-center gap-3 cursor-pointer" routerLink="/jeux">
             <div class="bg-[#3498db] p-2 rounded-lg shadow-lg">
               <mat-icon class="text-white">sports_esports</mat-icon>
@@ -30,13 +31,13 @@ import { AdminNavbarComponent } from './features/admin/components/admin-navbar.c
           </div>
 
           <div class="hidden lg:flex items-center space-x-2">
-            <a routerLink="/jeux" [routerLinkActive]="'active-link'" 
+            <a routerLink="/jeux" [routerLinkActive]="'active-link'"
                class="nav-item-user">
               <mat-icon>grid_view</mat-icon>
               <span>Catalogue</span>
             </a>
 
-            <a routerLink="/reservations/mine" routerLinkActive="active-link" 
+            <a routerLink="/reservations/mine" routerLinkActive="active-link"
                class="nav-item-user">
               <mat-icon>history</mat-icon>
               <span>Mes Réservations</span>
@@ -44,7 +45,7 @@ import { AdminNavbarComponent } from './features/admin/components/admin-navbar.c
           </div>
 
           <div class="flex items-center gap-4">
-            <button *ngIf="role === 'ADMIN'" routerLink="/admin" 
+            <button *ngIf="role === 'ADMIN'" routerLink="/admin"
                     class="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl text-xs font-bold transition-all">
               <mat-icon class="scale-75">admin_panel_settings</mat-icon>
               DASHBOARD
@@ -57,7 +58,7 @@ import { AdminNavbarComponent } from './features/admin/components/admin-navbar.c
                 <span class="text-gray-900 text-sm font-bold">{{ username }}</span>
                 <span class="text-gray-400 text-[10px] uppercase">{{ role }}</span>
               </div>
-              <button (click)="logout()" 
+              <button (click)="logout()"
                       class="text-gray-400 hover:text-red-500 p-2 rounded-lg transition-colors">
                 <mat-icon>logout</mat-icon>
               </button>

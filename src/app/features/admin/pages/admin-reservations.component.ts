@@ -15,40 +15,42 @@ import { ToastService } from '../../../shared/services/toast.service';
       <button class="btn-refresh" (click)="refresh()" [disabled]="loadingId !== null">🔄 Actualiser</button>
     </div>
 
-    <div class="list" *ngIf="items.length; else empty">
-      <div class="item shadow-sm" *ngFor="let r of items">
-        <div class="info">
-          <div class="main-info">
-            <span class="badge-id">#{{r.id}}</span>
-            <strong>Utilisateur:</strong> {{r.utilisateurUsername}} |
-            <strong>Jeu (ID):</strong> {{r.jeuxId}}
-          </div>
-
-          <div class="date-info">
-            <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} |
-            <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}} |
-            <strong>Qté:</strong> {{r.quantity}}
-          </div>
-
-          <div class="status-row">
-            <span class="status-label">Statut actuel:</span>
-            <span class="status-value pending">{{r.status}}</span>
-          </div>
-
-          <div *ngIf="r.notes" class="notes">
-            <strong>Note:</strong> {{r.notes}}
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn-approve" (click)="update(r.id, 'APPROVED')" [disabled]="loadingId === r.id">
-            {{ loadingId === r.id ? '...' : 'Approuver' }}
-          </button>
-          <button class="btn-reject" (click)="update(r.id, 'REJECTED')" [disabled]="loadingId === r.id">
-            Rejeter
-          </button>
-        </div>
-      </div>
+    <div class="table-container" *ngIf="items.length; else empty">
+      <table class="reservation-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Utilisateur</th>
+            <th>Jeu (ID)</th>
+            <th>Date</th>
+            <th>Horaire</th>
+            <th>Quantité</th>
+            <th>Statut</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of items">
+            <td><span class="badge-id">#{{r.id}}</span></td>
+            <td>{{r.utilisateurUsername}}</td>
+            <td>{{r.jeuxId}}</td>
+            <td>{{r.bookingDate}}</td>
+            <td>{{r.startTime}} - {{r.endTime}}</td>
+            <td>{{r.quantity}}</td>
+            <td><span class="status-badge pending">{{r.status}}</span></td>
+            <td>{{r.notes || '-'}}</td>
+            <td class="actions-cell">
+              <button class="btn-approve" (click)="update(r.id, 'APPROVED')" [disabled]="loadingId === r.id">
+                {{ loadingId === r.id ? '...' : '✓' }}
+              </button>
+              <button class="btn-reject" (click)="update(r.id, 'REJECTED')" [disabled]="loadingId === r.id">
+                ✗
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <ng-template #empty>
@@ -59,27 +61,31 @@ import { ToastService } from '../../../shared/services/toast.service';
   </div>
   `,
   styles: [`
-    .wrap { max-width: 1000px; margin: 20px auto; padding: 0 16px; font-family: sans-serif; }
+    .wrap { max-width: 1200px; margin: 20px auto; padding: 0 16px; font-family: sans-serif; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .list { display: flex; flex-direction: column; gap: 16px; }
-    .item { display: flex; justify-content: space-between; align-items: center; border: 1px solid #eef2f7; border-radius: 12px; padding: 20px; background: #fff; transition: all 0.2s; }
-    .item:hover { border-color: #3498db; }
-    .info { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .main-info { font-size: 1.1rem; color: #2c3e50; }
-    .date-info { color: #5d6d7e; font-size: 0.95rem; }
-    .badge-id { background: #f1f3f5; padding: 2px 8px; border-radius: 4px; margin-right: 8px; font-weight: bold; font-size: 0.85rem; }
-    .status-row { margin-top: 5px; }
-    .status-value.pending { color: #f39c12; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; }
-    .notes { font-size: 0.85rem; color: #7f8c8d; font-style: italic; margin-top: 5px; background: #f9f9f9; padding: 5px 10px; border-radius: 6px; }
-    .actions { display: flex; gap: 10px; margin-left: 20px; }
+    h2 { margin: 0; color: #2c3e50; }
 
-    button { padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; border: none; transition: 0.2s; }
+    .table-container { overflow-x: auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+
+    .reservation-table { width: 100%; border-collapse: collapse; }
+    .reservation-table th, .reservation-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #eef2f7; }
+    .reservation-table th { background: #f8f9fa; color: #5d6d7e; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+    .reservation-table tbody tr:hover { background: #f8fbff; }
+    .reservation-table tbody tr:last-child td { border-bottom: none; }
+
+    .badge-id { background: #e3e8ee; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
+    .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .status-badge.pending { background: #fff3cd; color: #856404; }
+
+    .actions-cell { display: flex; gap: 8px; }
+    button { padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; transition: 0.2s; }
     .btn-approve { background: #27ae60; color: white; }
     .btn-approve:hover:not(:disabled) { background: #219150; }
-    .btn-reject { background: #ecf0f1; color: #c0392b; border: 1px solid #fab1a0; }
-    .btn-reject:hover:not(:disabled) { background: #ff7675; color: white; }
-    .btn-refresh { background: #3498db; color: white; padding: 8px 16px; font-size: 0.9rem; }
+    .btn-reject { background: #e74c3c; color: white; }
+    .btn-reject:hover:not(:disabled) { background: #c0392b; }
+    .btn-refresh { background: #3498db; color: white; padding: 8px 16px; font-size: 0.9rem; border-radius: 8px; }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .empty-state { text-align: center; padding: 60px; background: #f8f9fa; border-radius: 12px; color: #95a5a6; }
   `]
 })
