@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'api/**', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin/register', component: AdminRegisterComponent },
   { path: 'jeux', component: JeuxListComponent, canActivate: [authGuard] },
   { path: 'reservations/new', component: NewReservationComponent, canActivate: [authGuard] },
   { path: 'reservations/mine', component: MyReservationsComponent, canActivate: [authGuard] },
@@ -27,8 +28,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminDashboardComponent },
       { path: 'jeux', component: AdminJeuxComponent },
-      { path: 'reservations', component: AdminReservationsComponent },
-      { path: 'register', component: AdminRegisterComponent }
+      { path: 'reservations', component: AdminReservationsComponent }
     ]
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },

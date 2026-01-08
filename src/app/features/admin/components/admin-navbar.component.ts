@@ -39,11 +39,6 @@ import { AuthService } from '../../../core/services/auth.service';
               <mat-icon>event</mat-icon>
               <span>Réservations</span>
             </a>
-
-            <a routerLink="/admin/register" routerLinkActive="active-link" class="nav-item">
-              <mat-icon>person_add</mat-icon>
-              <span>Créer un compte</span>
-            </a>
           </div>
 
           <div class="flex items-center gap-4">
