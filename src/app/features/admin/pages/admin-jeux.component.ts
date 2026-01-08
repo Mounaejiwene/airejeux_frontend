@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { JeuxService } from '../../jeux/services/jeux.service';
 import { JeuxRequestDto, JeuxResponseDto } from '../../../shared/models/jeux.dto';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-jeux',
@@ -142,7 +143,7 @@ export class AdminJeuxComponent implements OnInit {
   errorMessage = '';
   currentJeu: JeuxRequestDto = this.getEmptyJeu();
 
-  constructor(private jeuxService: JeuxService) {}
+  constructor(private jeuxService: JeuxService, private toast: ToastService) {}
 
   ngOnInit() {
     this.loadJeux();
@@ -189,13 +190,15 @@ export class AdminJeuxComponent implements OnInit {
     operation.subscribe({
       next: () => {
         this.loading = false;
+        this.toast.success(this.isEditMode ? 'Jeu modifié avec succès !' : 'Jeu créé avec succès !');
         this.closeForm();
         this.loadJeux();
       },
       error: (err) => {
         this.loading = false;
-        this.errorMessage = err.error?.message || 'Une erreur est survenue';
-        console.error('Erreur lors de la sauvegarde:', err);
+        const msg = err.error?.message || 'Une erreur est survenue';
+        this.errorMessage = msg;
+        this.toast.error(msg);
       }
     });
   }
@@ -206,17 +209,16 @@ export class AdminJeuxComponent implements OnInit {
     }
 
     this.loading = true;
-    this.jeuxService.deleteJeu(jeu.id).subscribe({
+this.jeuxService.deleteJeu(jeu.id).subscribe({
       next: () => {
         this.loading = false;
-        // MISE À JOUR AUTOMATIQUE : on retire le jeu de la liste locale
-        this.jeux = this.jeux.filter(j => j.id !== jeu.id); 
-        console.log('Jeu supprimé de l’affichage local');
+        this.jeux = this.jeux.filter(j => j.id !== jeu.id);
+        this.toast.success('Jeu supprimé avec succès !');
       },
       error: (err) => {
         this.loading = false;
         const msg = err.error?.message || 'Erreur lors de la suppression';
-        alert(`Erreur: ${msg}`);
+        this.toast.error(msg);
       }
     });
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservationsService } from '../../reservations/services/reservations.service';
 import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-reservations',
@@ -19,13 +20,13 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
         <div class="info">
           <div class="main-info">
             <span class="badge-id">#{{r.id}}</span>
-            <strong>Utilisateur:</strong> {{r.utilisateurUsername}} | 
+            <strong>Utilisateur:</strong> {{r.utilisateurUsername}} |
             <strong>Jeu (ID):</strong> {{r.jeuxId}}
           </div>
-          
+
           <div class="date-info">
-            <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} | 
-            <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}} | 
+            <strong>Date:</strong> {{r.dateDebut | date:'dd/MM/yyyy'}} |
+            <strong>Heure:</strong> {{r.dateDebut | date:'HH:mm'}} - {{r.dateFin | date:'HH:mm'}} |
             <strong>Qté:</strong> {{r.quantity}}
           </div>
 
@@ -33,7 +34,7 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
             <span class="status-label">Statut actuel:</span>
             <span class="status-value pending">{{r.status}}</span>
           </div>
-          
+
           <div *ngIf="r.notes" class="notes">
             <strong>Note:</strong> {{r.notes}}
           </div>
@@ -49,7 +50,7 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
         </div>
       </div>
     </div>
-    
+
     <ng-template #empty>
       <div class="empty-state">
         <p>Aucune réservation en attente de validation.</p>
@@ -71,7 +72,7 @@ import { ReservationResponseDto } from '../../../shared/models/reservation.dto';
     .status-value.pending { color: #f39c12; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; }
     .notes { font-size: 0.85rem; color: #7f8c8d; font-style: italic; margin-top: 5px; background: #f9f9f9; padding: 5px 10px; border-radius: 6px; }
     .actions { display: flex; gap: 10px; margin-left: 20px; }
-    
+
     button { padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; border: none; transition: 0.2s; }
     .btn-approve { background: #27ae60; color: white; }
     .btn-approve:hover:not(:disabled) { background: #219150; }
@@ -86,13 +87,13 @@ export class AdminReservationsComponent implements OnInit {
   items: ReservationResponseDto[] = [];
   loadingId: number | null = null;
 
-  constructor(private service: ReservationsService) {}
+  constructor(private service: ReservationsService, private toast: ToastService) {}
 
-  ngOnInit() { 
-    this.refresh(); 
+  ngOnInit() {
+    this.refresh();
   }
 
-  refresh() { 
+  refresh() {
     this.service.getPendingReservation().subscribe({
       next: (data) => this.items = data,
       error: (err) => console.error('Erreur chargement admin:', err)
@@ -102,13 +103,15 @@ export class AdminReservationsComponent implements OnInit {
   update(id: number, status: string) {
     this.loadingId = id;
     this.service.updateReservationStatus(id, { status }).subscribe({
-      next: () => { 
-        this.loadingId = null; 
-        this.refresh(); 
+      next: () => {
+        this.loadingId = null;
+        this.toast.success(status === 'APPROVED' ? 'Réservation approuvée !' : 'Réservation rejetée');
+        this.refresh();
       },
-      error: (err) => { 
-        this.loadingId = null; 
-        alert('Erreur lors de la mise à jour : ' + (err.error?.message || 'Serveur indisponible'));
+      error: (err) => {
+        this.loadingId = null;
+        const msg = err.error?.message || 'Serveur indisponible';
+        this.toast.error('Erreur : ' + msg);
       }
     });
   }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -54,7 +55,7 @@ export class LoginComponent {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private toast: ToastService) {}
 
   onSubmit() {
     if (!this.username || !this.password) {
@@ -73,8 +74,8 @@ export class LoginComponent {
         console.log('✅ Connexion réussie, token reçu');
         this.loading = false;
         this.successMessage = 'Connexion réussie ! Redirection...';
+        this.toast.success('Connexion réussie !');
 
-        // Attendre un instant pour que le token soit bien stocké
         setTimeout(() => {
           const isAdmin = this.auth.isAdmin();
           console.log('Est admin ?', isAdmin);
@@ -86,7 +87,9 @@ export class LoginComponent {
       error: (err) => {
         console.error('❌ Erreur de connexion:', err);
         this.loading = false;
-        this.errorMessage = err.error?.message || 'Identifiants incorrects';
+        const msg = err.error?.message || 'Identifiants incorrects';
+        this.errorMessage = msg;
+        this.toast.error(msg);
       },
     });
   }
