@@ -12,6 +12,7 @@ export interface ReservationResponseDto {
   utilisateurId?: number;
   utilisateurUsername?: string;
   jeuxId: number;
+  jeuxNom?: string;     // Nom du jeu réservé
   bookingDate: string; // "YYYY-MM-DD"
   startTime: string;   // "HH:mm:ss"
   endTime: string;     // "HH:mm:ss"

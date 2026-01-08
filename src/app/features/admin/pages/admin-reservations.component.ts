@@ -21,7 +21,7 @@ import { ToastService } from '../../../shared/services/toast.service';
           <tr>
             <th>ID</th>
             <th>Utilisateur</th>
-            <th>Jeu (ID)</th>
+            <th>Jeu</th>
             <th>Date</th>
             <th>Horaire</th>
             <th>Quantité</th>
@@ -34,7 +34,7 @@ import { ToastService } from '../../../shared/services/toast.service';
           <tr *ngFor="let r of items">
             <td><span class="badge-id">#{{r.id}}</span></td>
             <td>{{r.utilisateurUsername}}</td>
-            <td>{{r.jeuxId}}</td>
+            <td><strong>{{r.jeuxNom || 'Jeu #' + r.jeuxId}}</strong></td>
             <td>{{r.bookingDate}}</td>
             <td>{{r.startTime}} - {{r.endTime}}</td>
             <td>{{r.quantity}}</td>
