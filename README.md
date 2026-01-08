@@ -1,27 +1,122 @@
-# AirejeuxFrontend
+# 🎮 AireJeux - Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Application web Angular pour la gestion et la réservation d'aires de jeux à Tours.
 
-## Development server
+## 📋 Description
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+AireJeux est une plateforme de réservation d'équipements de jeux permettant aux utilisateurs de consulter un catalogue interactif avec carte géographique, de réserver des créneaux horaires, et aux administrateurs de gérer les jeux et valider les réservations.
 
-## Code scaffolding
+## ✨ Fonctionnalités
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 👤 Espace Utilisateur
+- 🗺️ **Carte interactive** avec Leaflet affichant la localisation des jeux à Tours
+- 📋 **Catalogue des jeux** avec filtrage et recherche
+- 📅 **Réservation de créneaux** avec sélection de date, heure et quantité
+- 📜 **Suivi des réservations** avec statuts (En attente, Approuvé, Rejeté)
+- 🔔 **Notifications toast** pour les succès et erreurs
 
-## Build
+### 👨‍💼 Espace Administrateur
+- 🎯 **Gestion des jeux** (CRUD complet)
+- ✅ **Validation des réservations** en attente
+- 📊 **Tableau de bord** avec vue d'ensemble
+- 🗺️ **Configuration des coordonnées GPS** pour chaque jeu
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 🔐 Authentification
+- Connexion/Inscription avec JWT
+- Guards pour routes protégées (admin/user)
+- Gestion des rôles (ROLE_USER, ROLE_ADMIN)
 
-## Running unit tests
+## 🛠️ Technologies
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Framework** : Angular 17 (standalone components)
+- **Styling** : Tailwind CSS
+- **Cartographie** : Leaflet 1.9.4
+- **HTTP Client** : Angular HttpClient avec intercepteurs JWT
+- **Routing** : Angular Router avec guards
+- **UI Components** : Angular Material Icons
 
-## Running end-to-end tests
+## 📦 Installation
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+# Cloner le repository
+git clone https://github.com/Mounaejiwene/airejeux_frontend.git
+cd airejeux_frontend
 
-## Further help
+# Installer les dépendances
+npm install
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Démarrer le serveur de développement
+npm run start
+```
+
+L'application sera accessible sur `http://localhost:4200/`
+
+## ⚙️ Configuration
+
+### API Backend
+
+Modifier l'URL du backend dans `src/app/core/services/api-config.service.ts` :
+
+```typescript
+readonly apiBaseUrl = 'http://localhost:8080/api';
+```
+
+## 🏗️ Structure du Projet
+
+```
+src/
+├── app/
+│   ├── core/               # Services core (auth, api-config, guards)
+│   ├── features/           # Modules métier
+│   │   ├── admin/          # Dashboard et gestion admin
+│   │   ├── auth/           # Login/Register
+│   │   ├── jeux/           # Catalogue et carte
+│   │   └── reservations/   # Gestion réservations
+│   └── shared/             # Composants partagés (toast, modèles)
+└── assets/                 # Ressources statiques
+```
+
+## 🚀 Scripts Disponibles
+
+```bash
+# Démarrage dev
+npm start
+
+# Build production
+npm run build
+
+# Tests
+npm test
+
+# Linting
+ng lint
+```
+
+## 🌐 Routes Principales
+
+| Route | Description | Accès |
+|-------|-------------|-------|
+| `/login` | Page de connexion | Public |
+| `/register` | Inscription | Public |
+| `/jeux` | Catalogue avec carte | Authentifié |
+| `/reservations/new` | Nouvelle réservation | Authentifié |
+| `/reservations/mine` | Mes réservations | Authentifié |
+| `/admin` | Dashboard admin | Admin uniquement |
+| `/admin/jeux` | Gestion des jeux | Admin uniquement |
+| `/admin/reservations` | Validation réservations | Admin uniquement |
+
+## 👥 Contributors
+
+- **Christ Chadrak MVOUNGOU** - ccmvoungou@gmail.com
+- **Mariem Ejiewen** - [@Mounaejiwene](https://github.com/Mounaejiwene)
+- **Sidi Med SABAR** - [@sabar40](https://github.com/sabar40)
+
+## 📄 Licence
+
+Ce projet est développé dans le cadre d'un projet académique à Polytech Tours.
+
+---
+
+**Version** : 1.0.0  
+**Angular** : 17.3.17  
+**Node** : >=18.x
