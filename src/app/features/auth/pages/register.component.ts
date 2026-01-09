@@ -11,7 +11,7 @@ import { ToastService } from '../../../shared/services/toast.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-  <div class="container">
+  <div class="w-full max-w-md mx-auto my-8 bg-white rounded-xl shadow-md p-6">
     <h2>Inscription</h2>
     <form (ngSubmit)="onSubmit()">
       <input [(ngModel)]="form.username" name="username" placeholder="Username" required />
@@ -24,7 +24,7 @@ import { ToastService } from '../../../shared/services/toast.service';
     <p><a routerLink="/login">Déjà un compte ? Se connecter</a></p>
   </div>
   `,
-  styles: [`.container{max-width:420px;margin:40px auto;display:flex;flex-direction:column;gap:12px}`]
+  styles: []
 })
 export class RegisterComponent {
   form: UserDto = { username: '', password: '', nom: '', prenom: '', mail: '', role: 'ROLE_USER' };

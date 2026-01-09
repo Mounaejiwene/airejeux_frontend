@@ -41,6 +41,12 @@ import { AuthService } from '../../../core/services/auth.service';
             </a>
           </div>
 
+          <div class="lg:hidden">
+            <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-50" (click)="menuOpen = !menuOpen">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </div>
+
           <div class="flex items-center gap-4">
             <button routerLink="/jeux"
                     class="hidden md:flex items-center gap-2 px-4 py-2 border border-indigo-100 text-indigo-600 hover:bg-indigo-50 rounded-xl text-sm font-bold transition-all">
@@ -58,6 +64,26 @@ import { AuthService } from '../../../core/services/auth.service';
 
         </div>
       </div>
+      <div class="lg:hidden border-t border-gray-100" *ngIf="menuOpen">
+        <div class="px-4 py-3 space-y-1">
+          <a routerLink="/admin" [routerLinkActive]="'active-link'" [routerLinkActiveOptions]="{exact:true}"
+             (click)="menuOpen=false"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </a>
+          <a routerLink="/admin/jeux" routerLinkActive="active-link" (click)="menuOpen=false"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>sports_esports</mat-icon>
+            <span>Jeux</span>
+          </a>
+          <a routerLink="/admin/reservations" routerLinkActive="active-link" (click)="menuOpen=false"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>event</mat-icon>
+            <span>Réservations</span>
+          </a>
+        </div>
+      </div>
     </nav>
   `,
   styles: [`
@@ -73,6 +99,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class AdminNavbarComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  menuOpen = false;
 
   logout(): void {
     this.auth.logout();

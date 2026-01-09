@@ -10,7 +10,7 @@ import { ToastService } from '../../../shared/services/toast.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-  <div class="container">
+  <div class="w-full max-w-md mx-auto my-8 bg-white rounded-xl shadow-md p-6">
     <h2>Page de Connexion</h2>
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <div class="form-group">
@@ -33,7 +33,7 @@ import { ToastService } from '../../../shared/services/toast.service';
   </div>
   `,
   styles: [`
-    .container{max-width:380px;margin:40px auto;padding:20px;background:white;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+    
     .form-group{margin-bottom:16px}
     label{display:block;margin-bottom:6px;font-weight:500;color:#333}
     input{width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box}

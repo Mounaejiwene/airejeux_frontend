@@ -58,6 +58,10 @@ import { ToastComponent } from './shared/components/toast/toast.component';
                 <span class="text-gray-900 text-sm font-bold">{{ username }}</span>
                 <span class="text-gray-400 text-[10px] uppercase">{{ role }}</span>
               </div>
+              <button class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-50"
+                      (click)="toggleMenu()" aria-label="Ouvrir le menu">
+                <mat-icon>menu</mat-icon>
+              </button>
               <button (click)="logout()"
                       class="text-gray-400 hover:text-red-500 p-2 rounded-lg transition-colors">
                 <mat-icon>logout</mat-icon>
@@ -65,6 +69,26 @@ import { ToastComponent } from './shared/components/toast/toast.component';
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <div class="lg:hidden border-t border-gray-100" *ngIf="menuOpen">
+        <div class="px-4 py-3 space-y-1">
+          <a routerLink="/jeux" [routerLinkActive]="'active-link'" (click)="closeMenu()"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>grid_view</mat-icon>
+            <span>Catalogue</span>
+          </a>
+          <a routerLink="/reservations/mine" routerLinkActive="active-link" (click)="closeMenu()"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>history</mat-icon>
+            <span>Mes Réservations</span>
+          </a>
+          <a *ngIf="role === 'ADMIN'" routerLink="/admin" (click)="closeMenu()"
+             class="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Dashboard</span>
+          </a>
         </div>
       </div>
     </nav>
